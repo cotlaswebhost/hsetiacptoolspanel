@@ -56,6 +56,12 @@ chmod +x install.sh
 ./install.sh
 ```
 
+You can also make both scripts executable at once:
+
+```bash
+chmod +x install.sh uninstall.sh
+```
+
 The installer will:
 
 1. Verify required files and paths
@@ -76,6 +82,45 @@ cp -a /root/hsetiacptoolspanel-backups/<timestamp>/users/database.py /usr/local/
 cp -a /root/hsetiacptoolspanel-backups/<timestamp>/whm/views.py /usr/local/olspanel/mypanel/whm/views.py
 cp -a /root/hsetiacptoolspanel-backups/<timestamp>/whm/templates/whm/backup_restore.html /usr/local/olspanel/mypanel/whm/templates/whm/backup_restore.html
 systemctl restart cp
+```
+
+## Uninstall Addon
+
+Use the uninstall script to restore original OLSPanel files from installer backups.
+
+List available backups:
+
+```bash
+./uninstall.sh --list
+```
+
+Uninstall using latest backup (default behavior):
+
+```bash
+./uninstall.sh
+```
+
+Uninstall using a specific backup directory:
+
+```bash
+./uninstall.sh --backup-dir /root/hsetiacptoolspanel-backups/<timestamp>
+```
+
+The uninstall script will:
+
+1. Restore target files from chosen backup
+2. Run compile + Django checks
+3. Restart `cp` and run health checks
+4. Save your current (pre-uninstall) files into `/root/hsetiacptoolspanel-uninstall-backups/<timestamp>`
+
+## Reinstall Test Cycle
+
+To test uninstall/install repeatedly:
+
+```bash
+cd /root/hsetiacptoolspanel
+./uninstall.sh
+./install.sh
 ```
 
 ## Usage After Install
